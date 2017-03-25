@@ -1,9 +1,8 @@
 
+import com.github.jonatabecker.commons.Commands;
 import com.github.jonatabecker.commons.World;
 import com.github.jonatabecker.commons.WorldParser;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -19,7 +18,7 @@ import javax.swing.SwingUtilities;
  *
  * @author JonataBecker
  */
-public class Kombat extends JFrame {
+public class Kombat extends JFrame implements Commands {
 
     private World world;
     private final WorldParser worldParser;
@@ -27,6 +26,7 @@ public class Kombat extends JFrame {
     private Socket s;
     private BufferedReader in;
     private PrintWriter out;
+    private KombatComponent component;
 
     public Kombat() {
         this.world = new World();
@@ -41,6 +41,9 @@ public class Kombat extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        setLayout(new BorderLayout());
+        component = new KombatComponent(world);
+        add(component, BorderLayout.CENTER);
     }
 
     private void initEvents() {
@@ -52,25 +55,25 @@ public class Kombat extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    out.println("PR_R");
+                    out.println("P" + RIGHT);
+                }
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    out.println("P" + LEFT);
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    out.println("RE_R");
+                    out.println("R" + RIGHT);
+                }
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    out.println("R" + LEFT);
                 }
             }
         });
         addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                super.windowClosing(e); //To change body of generated methods, choose Tools | Templates.
-//            }
-//            
-            
-            
+
             @Override
             public void windowClosing(WindowEvent e) {
                 out.println("exit");
@@ -96,33 +99,18 @@ public class Kombat extends JFrame {
                 while (true) {
                     command = in.readLine();
                     world = worldParser.toObject(command);
-                    System.out.println(System.currentTimeMillis());
-                    
-//                    SwingUtilities.invokeLater(() -> {
-                        repaint();
-//                    });
+                    component.setWord(world);
+                    SwingUtilities.invokeLater(() -> {
+                        component.revalidate();
+                        System.out.println("Parser" + System.currentTimeMillis());
+                    });
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 System.exit(1);
             }
         });
         thread.setDaemon(true);
         thread.start();
-    }
-
-    
-    
-    @Override
-    public void paint(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.GRAY);
-        g2d.fillRect(0, 0, getWidth(), getHeight());
-        
-        g2d.setColor(Color.red);
-        world.getPlayers().forEach((player) -> {
-            g2d.fillRect(player.getX(), player.getY(), 100, 100);
-        });
     }
 
     public static void main(String[] args) {
