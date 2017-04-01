@@ -28,7 +28,8 @@ public class Kombat extends JFrame implements Commands {
     private BufferedReader in;
     private PrintWriter out;
     private KombatComponent component;
-
+    private PlacarComponent placarComponent;
+    
     public Kombat() {
         this.world = new World();
         this.worldParser = new WorldParser();
@@ -45,6 +46,8 @@ public class Kombat extends JFrame implements Commands {
         setVisible(true);
         setLayout(new BorderLayout());
         component = new KombatComponent(world);
+        placarComponent = new PlacarComponent(world);
+        add(placarComponent, BorderLayout.NORTH);
         add(component, BorderLayout.CENTER);
     }
 
@@ -114,9 +117,12 @@ public class Kombat extends JFrame implements Commands {
                     command = in.readLine();
                     world = worldParser.toObject(command);
                     component.setWord(world);
+                    placarComponent.setWord(world);
                     SwingUtilities.invokeLater(() -> {
                         component.revalidate();
+                        placarComponent.repaint();
                     });
+                    
                 }
             } catch (Exception e) {
                 System.exit(1);

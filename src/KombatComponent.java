@@ -63,6 +63,9 @@ public class KombatComponent extends JPanel {
             if (player.isPosRight()) {
                 x += width;
                 width = width * -1;
+                if (player.isPunching()) {
+                    x -= 10;
+                }
             }
             g.drawImage(image, x, y, width, height, this);
         });
