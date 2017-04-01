@@ -1,5 +1,6 @@
 
 import com.github.jonatabecker.commons.Commands;
+import static com.github.jonatabecker.commons.Commands.PUNCH;
 import com.github.jonatabecker.commons.World;
 import com.github.jonatabecker.commons.WorldParser;
 import java.awt.BorderLayout;
@@ -37,8 +38,9 @@ public class Kombat extends JFrame implements Commands {
         run();
     }
 
-    private void initGui() {
+    private void initGui() { 
         setSize(800, 600);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setLayout(new BorderLayout());
@@ -60,6 +62,12 @@ public class Kombat extends JFrame implements Commands {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                     out.println("P" + LEFT);
                 }
+                if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+                    out.println("P" + PUNCH);
+                }                
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    out.println("P" + BULLET);
+                }                
             }
 
             @Override
@@ -69,6 +77,12 @@ public class Kombat extends JFrame implements Commands {
                 }
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                     out.println("R" + LEFT);
+                }
+                if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+                    out.println("R" + PUNCH);
+                }
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    out.println("R" + BULLET);
                 }
             }
         });
@@ -102,7 +116,6 @@ public class Kombat extends JFrame implements Commands {
                     component.setWord(world);
                     SwingUtilities.invokeLater(() -> {
                         component.revalidate();
-                        System.out.println("Parser" + System.currentTimeMillis());
                     });
                 }
             } catch (Exception e) {
