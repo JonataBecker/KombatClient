@@ -18,10 +18,9 @@ public class KombatComponent extends JPanel {
     private Image runRight;
     private Image waiting;
     private Image punching;
-    private Image up;
     private Image d;
-    private Image deading;
     private Image dead;
+    private Image jump;
 
     public KombatComponent(World world) {
         super();
@@ -34,9 +33,7 @@ public class KombatComponent extends JPanel {
             waiting = new ImageIcon(getClass().getResource("waiting.gif")).getImage();
             punching = new ImageIcon(getClass().getResource("punch.gif")).getImage();
             runRight = new ImageIcon(getClass().getResource("walk_r.gif")).getImage();
-            up = new ImageIcon(getClass().getResource("up.gif")).getImage();
             d = new ImageIcon(getClass().getResource("d03.png")).getImage();
-            deading = new ImageIcon(getClass().getResource("dead.gif")).getImage();
             dead = new ImageIcon(getClass().getResource("f06.png")).getImage();
         } catch (Exception e) {
             System.out.println(e);
@@ -72,6 +69,12 @@ public class KombatComponent extends JPanel {
             height = dead.getHeight(this);
             y += 100;
             image = dead;        
+        }
+        if (player.isUp()) {
+            jump = new ImageIcon(getClass().getResource("jump.gif")).getImage();
+            width = jump.getWidth(this);
+            height = jump.getHeight(this);
+            image = jump;
         }
         if (player.isWalking()) {
             width = runRight.getWidth(this);
