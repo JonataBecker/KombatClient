@@ -71,6 +71,12 @@ public class Kombat extends JFrame implements Commands {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     out.println("P" + BULLET);
                 }                
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    out.println("P" + DOWN);
+                }
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    out.println("P" + UP);
+                }
             }
 
             @Override
@@ -86,6 +92,12 @@ public class Kombat extends JFrame implements Commands {
                 }
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     out.println("R" + BULLET);
+                }
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    out.println("R" + DOWN);
+                }
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    out.println("R" + UP);
                 }
             }
         });
@@ -121,8 +133,7 @@ public class Kombat extends JFrame implements Commands {
                     SwingUtilities.invokeLater(() -> {
                         component.revalidate();
                         placarComponent.repaint();
-                    });
-                    
+                    });   
                 }
             } catch (Exception e) {
                 System.exit(1);

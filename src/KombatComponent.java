@@ -1,4 +1,5 @@
 
+import com.github.jonatabecker.commons.Player;
 import com.github.jonatabecker.commons.World;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -17,6 +18,10 @@ public class KombatComponent extends JPanel {
     private Image runRight;
     private Image waiting;
     private Image punching;
+    private Image up;
+    private Image d;
+    private Image deading;
+    private Image dead;
 
     public KombatComponent(World world) {
         super();
@@ -29,6 +34,10 @@ public class KombatComponent extends JPanel {
             waiting = new ImageIcon(getClass().getResource("waiting.gif")).getImage();
             punching = new ImageIcon(getClass().getResource("punch.gif")).getImage();
             runRight = new ImageIcon(getClass().getResource("walk_r.gif")).getImage();
+            up = new ImageIcon(getClass().getResource("up.gif")).getImage();
+            d = new ImageIcon(getClass().getResource("d03.png")).getImage();
+            deading = new ImageIcon(getClass().getResource("dead.gif")).getImage();
+            dead = new ImageIcon(getClass().getResource("f06.png")).getImage();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -44,35 +53,51 @@ public class KombatComponent extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.red);
         world.getPlayers().forEach((player) -> {
-            int width = waiting.getWidth(this);
-            int height = waiting.getHeight(this);
-            Image image = waiting;
-            if (player.isWalking()) {
-                width = runRight.getWidth(this);
-                height = runRight.getHeight(this);
-                image = runRight;
-            }
-
-            if (player.isPunching()) {
-                width = punching.getWidth(this);
-                height = punching.getHeight(this);
-                image = punching;
-            }
-            int x = player.getX();
-            int y = player.getY();
-            if (player.isPosRight()) {
-                x += width;
-                width = width * -1;
-                if (player.isPunching()) {
-                    x -= 10;
-                }
-            }
-            g.drawImage(image, x, y, width, height, this);
+            drawPlayer(player, g);
         });
         world.getBullets().forEach((b) -> {
             g.setColor(Color.PINK);
             g.fillOval(b.getX(), b.getY(), 15, 15);
         });
+    }
+
+    private void drawPlayer(Player player, Graphics g) {
+        int width = waiting.getWidth(this);
+        int height = waiting.getHeight(this);
+        int x = player.getX();
+        int y = player.getY();
+        Image image = waiting;
+        if (player.isDead()) {
+            width = dead.getWidth(this);
+            height = dead.getHeight(this);
+            y += 100;
+            image = dead;        
+        }
+        if (player.isWalking()) {
+            width = runRight.getWidth(this);
+            height = runRight.getHeight(this);
+            image = runRight;
+        }
+        if (player.isPunching()) {
+            width = punching.getWidth(this);
+            height = punching.getHeight(this);
+            image = punching;
+        }
+        if (player.isDown()) {
+            width = d.getWidth(this);
+            height = d.getHeight(this);
+            image = d;
+            y += 60;
+        }
+        if (player.isPosRight()) {
+            x += width;
+            width = width * -1;
+            if (player.isPunching()) {
+                x -= 10;
+            }
+        }
+        g.drawImage(image, x, y, width, height, KombatComponent.this);
+
     }
 
 }
