@@ -29,7 +29,7 @@ public class Kombat extends JFrame implements Commands {
     private PrintWriter out;
     private KombatComponent component;
     private PlacarComponent placarComponent;
-    
+
     public Kombat() {
         this.world = new World();
         this.worldParser = new WorldParser();
@@ -39,7 +39,7 @@ public class Kombat extends JFrame implements Commands {
         run();
     }
 
-    private void initGui() { 
+    private void initGui() {
         setSize(800, 600);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,10 +67,10 @@ public class Kombat extends JFrame implements Commands {
                 }
                 if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
                     out.println("P" + PUNCH);
-                }                
+                }
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     out.println("P" + BULLET);
-                }                
+                }
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     out.println("P" + DOWN);
                 }
@@ -127,13 +127,17 @@ public class Kombat extends JFrame implements Commands {
             try {
                 while (true) {
                     command = in.readLine();
+                    if (command.equals(CONNECT)) {
+                        out.println("P" + CONNECT);
+                        continue;
+                    }
                     world = worldParser.toObject(command);
                     component.setWord(world);
                     placarComponent.setWord(world);
                     SwingUtilities.invokeLater(() -> {
                         component.revalidate();
                         placarComponent.repaint();
-                    });   
+                    });
                 }
             } catch (Exception e) {
                 System.exit(1);
